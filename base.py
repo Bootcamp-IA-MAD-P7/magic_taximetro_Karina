@@ -1,12 +1,16 @@
 import customtkinter as ctk
 from datetime import datetime
-import os  # <-- NUEVO: Para poder manejar la creación de carpetas
+import os
+import logging  # <-- NUEVO: Para gestionar los registros del sistema
 
 # 1. MAIN CLASS
 class MagicTaxiMeter(ctk.CTk):
     
     def __init__(self):
         super().__init__()
+
+        # --- CONFIGURACIÓN DE LOGS ---
+        self.setup_logging()
 
         # --- DATA ATTRIBUTES (The "Boxes") ---
         self.secret_pin = "1234"
@@ -25,6 +29,22 @@ class MagicTaxiMeter(ctk.CTk):
         self.configure(fg_color="#FFF0F5") # Lavender Blush
 
         self.show_login_ui()
+
+    def setup_logging(self):
+        """Crea la carpeta de logs si no existe y configura el sistema de registro"""
+        log_folder = "logs"
+        os.makedirs(log_folder, exist_ok=True)
+        log_file = os.path.join(log_folder, "taxi_system.log")
+        
+        # Configuración básica del logger
+        logging.basicConfig(
+            filename=log_file,
+            level=logging.INFO,
+            format="%(asctime)s - [%(levelname)s] - %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+            encoding="utf-8"
+        )
+        logging.info("--- SISTEMA INICIADO ---")
 
     def show_login_ui(self):
         """Security and Welcome Screen"""
@@ -68,11 +88,14 @@ class MagicTaxiMeter(ctk.CTk):
 
     def verify_pin(self):
         """PIN Verification logic"""
-        if self.pin_entry.get() == self.secret_pin:
+        entered_pin = self.pin_entry.get()
+        if entered_pin == self.secret_pin:
+            logging.info("Inicio de sesión correcto.")
             self.login_frame.destroy()
             self.setup_main_app()
             self.run_clock_loop()
         else:
+            logging.warning(f"Intento de acceso fallido con el PIN: {entered_pin}")
             self.pin_entry.configure(border_color="red")
             self.pin_entry.delete(0, 'end') # Limpia el PIN incorrecto
            
@@ -128,7 +151,7 @@ class MagicTaxiMeter(ctk.CTk):
         # --- BOTÓN QUIT (Abajo a la derecha) ---
         self.btn_quit = ctk.CTkButton(self, text="QUIT ×", width=85, height=30, corner_radius=10,
                                       fg_color="#FFC3C3", text_color="#7A1E1E", hover_color="#FFA6A6",
-                                      font=("Arial", 12, "bold"), command=self.destroy)
+                                      font=("Arial", 12, "bold"), command=self.exit_application)
         self.btn_quit.pack(side="bottom", anchor="e", pady=15, padx=20)
         
     def start_trip(self):
@@ -137,6 +160,9 @@ class MagicTaxiMeter(ctk.CTk):
             self.total_fare = 0.0
             self.fare_stopped = 0.0
             self.fare_moving = 0.0
+            logging.info(f"Viaje #{self.trip_id} iniciado.")
+        else:
+            logging.info(f"Viaje #{self.trip_id} reanudado.")
             
         self.is_running = True 
         self.is_moving = True 
@@ -150,9 +176,12 @@ class MagicTaxiMeter(ctk.CTk):
             status = "MOVING" if self.is_moving else "CAR STOPPED"
             color = "#51CF66" if self.is_moving else "#FAB005"
             self.status_label.configure(text=status, fg_color=color)
+            logging.info(f"Cambio de estado en Viaje #{self.trip_id}: El coche ahora está en {status}.")
 
     def reset_trip(self):
         """Resets all metrics without changing the trip ID or creating a file"""
+        logging.warning(f"Viaje #{self.trip_id} cancelado/reiniciado por el usuario.")
+        
         self.is_active = False
         self.is_running = False
         self.is_moving = False
@@ -171,6 +200,7 @@ class MagicTaxiMeter(ctk.CTk):
 
     def finish_trip_final(self):
         if self.is_active:
+            logging.info(f"Viaje #{self.trip_id} completado con éxito. Importe total: €{self.total_fare:.2f}")
             self.is_active = False
             self.is_running = False
             self.status_label.configure(text="TRIP FINISHED", fg_color="#CED4DA")
@@ -180,11 +210,7 @@ class MagicTaxiMeter(ctk.CTk):
 
     def generate_invoice(self):
         folder_name = "invoices"
-        
-        # Creamos la carpeta si no existe (exist_ok=True evita que lance error si ya existe)
         os.makedirs(folder_name, exist_ok=True)
-        
-        # Unimos la ruta de la carpeta con el nombre del archivo
         filename = os.path.join(folder_name, f"invoice_{self.trip_id:03d}.txt")
         
         with open(filename, "w", encoding="utf-8") as f:
@@ -209,6 +235,11 @@ class MagicTaxiMeter(ctk.CTk):
             self.details_label.configure(text=f"Stop: €{self.fare_stopped:.2f} | Move: €{self.fare_moving:.2f}")
         
         self.after(1000, self.run_clock_loop)
+
+    def exit_application(self):
+        """Registra el cierre en el log y destruye la ventana"""
+        logging.info("--- SISTEMA CERRADO POR EL USUARIO (QUIT) ---\n")
+        self.destroy()
 
 if __name__ == "__main__":
     app = MagicTaxiMeter()
