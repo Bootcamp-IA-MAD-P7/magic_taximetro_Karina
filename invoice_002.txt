@@ -1,12 +1,6 @@
-====================================
-       MAGIC TAXI SERVICES         
-       Invoice ID: #002 
-====================================
-Date: 2026-05-08 13:48:38
-------------------------------------
-Stopped Time Cost:    € 0.02
-Driving Time Cost:    € 0.00
-------------------------------------
-TOTAL TO PAY:         € 0.02
-====================================
-      Thank you for your visit!     
+--- MAGIC TAXI INVOICE #002 ---
+Date: 2026-05-17 19:24
+Total: â‚¬1.46
+Stopped Fare: â‚¬0.56
+Moving Fare: â‚¬0.90
+--- Thank you! ---
