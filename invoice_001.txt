@@ -1,6 +1,0 @@
---- MAGIC TAXI INVOICE #001 ---
-Date: 2026-05-17 19:22
-Total: €3.47
-Stopped Fare: €1.12
-Moving Fare: €2.35
---- Thank you! ---
