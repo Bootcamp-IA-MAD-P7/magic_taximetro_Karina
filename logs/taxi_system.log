@@ -1,0 +1,31 @@
+2026-05-17 21:09:56 - [INFO] - --- SISTEMA INICIADO ---
+2026-05-17 21:10:05 - [INFO] - Inicio de sesión correcto.
+2026-05-17 21:10:06 - [INFO] - Viaje #1 iniciado.
+2026-05-17 21:10:14 - [INFO] - Cambio de estado en Viaje #1: El coche ahora está en CAR STOPPED.
+2026-05-17 21:10:20 - [INFO] - Cambio de estado en Viaje #1: El coche ahora está en MOVING.
+2026-05-17 21:10:29 - [INFO] - Cambio de estado en Viaje #1: El coche ahora está en CAR STOPPED.
+2026-05-17 21:10:37 - [WARNING] - Viaje #1 cancelado/reiniciado por el usuario.
+2026-05-17 21:10:39 - [INFO] - Viaje #1 iniciado.
+2026-05-17 21:10:50 - [INFO] - Cambio de estado en Viaje #1: El coche ahora está en CAR STOPPED.
+2026-05-17 21:11:06 - [INFO] - Cambio de estado en Viaje #1: El coche ahora está en MOVING.
+2026-05-17 21:11:23 - [INFO] - Viaje #1 completado con éxito. Importe total: €1.67
+2026-05-17 21:11:31 - [INFO] - Viaje #2 iniciado.
+2026-05-17 21:11:32 - [WARNING] - Viaje #2 cancelado/reiniciado por el usuario.
+2026-05-17 21:11:45 - [INFO] - --- SISTEMA CERRADO POR EL USUARIO (QUIT) ---
+
+2026-05-17 22:32:36 - [INFO] - --- SISTEMA INICIADO ---
+2026-05-17 22:33:25 - [WARNING] - Intento de acceso fallido con el PIN: 1233
+2026-05-17 22:33:27 - [INFO] - Inicio de sesión correcto.
+2026-05-17 22:33:48 - [INFO] - --- SISTEMA CERRADO POR EL USUARIO (QUIT) ---
+
+2026-05-18 09:58:23 - [INFO] - --- SISTEMA INICIADO ---
+2026-05-18 09:58:23 - [INFO] - --- SISTEMA INICIADO ---
+2026-05-18 09:58:23 - [INFO] - Viaje #1 iniciado.
+2026-05-18 09:58:23 - [INFO] - --- SISTEMA INICIADO ---
+2026-05-18 09:58:24 - [INFO] - Viaje #1 iniciado.
+2026-05-18 09:58:24 - [INFO] - --- SISTEMA INICIADO ---
+2026-05-18 09:58:24 - [INFO] - Viaje #1 iniciado.
+2026-05-18 09:58:24 - [INFO] - Cambio de estado en Viaje #1: El coche ahora está en CAR STOPPED.
+2026-05-18 09:58:24 - [INFO] - --- SISTEMA INICIADO ---
+2026-05-18 09:58:24 - [INFO] - Viaje #1 iniciado.
+2026-05-18 09:58:24 - [WARNING] - Viaje #1 cancelado/reiniciado por el usuario.
