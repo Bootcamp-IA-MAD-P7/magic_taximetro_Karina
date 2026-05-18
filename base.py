@@ -1,32 +1,32 @@
 import customtkinter as ctk
 from datetime import datetime
 import os
-import logging  # <-- NUEVO: Para gestionar los registros del sistema
+import logging  
 
-# 1. MAIN CLASS
+
 class MagicTaxiMeter(ctk.CTk):
     
     def __init__(self):
         super().__init__()
 
-        # --- CONFIGURACIÓN DE LOGS ---
+
         self.setup_logging()
 
-        # --- DATA ATTRIBUTES (The "Boxes") ---
+
         self.secret_pin = "1234"
         self.trip_id = 1
-        self.is_active = False    # Has the trip record started?
-        self.is_running = False   # Is the clock ticking right now?
-        self.is_moving = False    # Is the taxi driving?
+        self.is_active = False    
+        self.is_running = False   
+        self.is_moving = False    
         
         self.total_fare = 0.0
         self.fare_stopped = 0.0
         self.fare_moving = 0.0
 
-        # --- WINDOW CONFIGURATION ---
+
         self.title("✨ Magic Taxi ✨")
         self.geometry("400x580") 
-        self.configure(fg_color="#FFF0F5") # Lavender Blush
+        self.configure(fg_color="#FFF0F5") 
 
         self.show_login_ui()
 
@@ -36,7 +36,7 @@ class MagicTaxiMeter(ctk.CTk):
         os.makedirs(log_folder, exist_ok=True)
         log_file = os.path.join(log_folder, "taxi_system.log")
         
-        # Configuración básica del logger
+
         logging.basicConfig(
             filename=log_file,
             level=logging.INFO,
@@ -51,11 +51,11 @@ class MagicTaxiMeter(ctk.CTk):
         self.login_frame = ctk.CTkFrame(self, fg_color="white", corner_radius=25)
         self.login_frame.pack(pady=40, padx=30, fill="both", expand=True)
 
-        # Título de Bienvenida
+
         ctk.CTkLabel(self.login_frame, text="🌸\n¡BIENVENIDO A MAGIC TAXI!", 
                      font=("Verdana", 16, "bold"), text_color="#FF69B4", justify="center").pack(pady=(25, 15))
         
-        # Cuadro de instrucciones / tarifas
+ 
         info_text = (
             "✨ Guía de Uso del Taxímetro ✨\n\n"
             "• START / RESUME: Inicia o reanuda el viaje.\n"
@@ -72,19 +72,18 @@ class MagicTaxiMeter(ctk.CTk):
                                        padx=15, pady=15, justify="left")
         self.info_label.pack(pady=10, padx=20, fill="x")
         
-        # Etiqueta de acceso
         ctk.CTkLabel(self.login_frame, text="Introduce tu PIN para acceder:", 
                      font=("Arial", 12, "bold"), text_color="#8E244E").pack(pady=(20, 5))
 
-        # Input de contraseña modificado con la indicación ENTER
+
         self.pin_entry = ctk.CTkEntry(self.login_frame, show="*", placeholder_text="PIN + ENTER",
                                       fg_color="#FFF0F5", border_color="#FFB6C1", justify="center",
                                       font=("Arial", 14))
         self.pin_entry.pack(pady=5, padx=40, fill="x")
         
-        # Enlazar la tecla Enter (Return) a la verificación del PIN
+
         self.pin_entry.bind("<Return>", lambda event: self.verify_pin())
-        self.pin_entry.focus() # Auto-selecciona el campo para escribir directamente
+        self.pin_entry.focus()
 
     def verify_pin(self):
         """PIN Verification logic"""
@@ -97,14 +96,14 @@ class MagicTaxiMeter(ctk.CTk):
         else:
             logging.warning(f"Intento de acceso fallido con el PIN: {entered_pin}")
             self.pin_entry.configure(border_color="red")
-            self.pin_entry.delete(0, 'end') # Limpia el PIN incorrecto
+            self.pin_entry.delete(0, 'end') 
            
     def setup_main_app(self):
         """Main Aesthetic Interface"""
         ctk.CTkLabel(self, text="🌸 MAGIC TAXI 🌸", font=("Verdana", 20, "bold"), 
                      text_color="#FF69B4").pack(pady=(20, 5))
 
-        # Main Fare Display
+
         self.display_frame = ctk.CTkFrame(self, corner_radius=25, fg_color="white", 
                                           border_width=2, border_color="#FFB6C1")
         self.display_frame.pack(pady=10, padx=30, fill="both")
@@ -117,38 +116,35 @@ class MagicTaxiMeter(ctk.CTk):
                                           font=("Arial", 16), text_color="#FF69B4")
         self.details_label.pack(pady=2)
 
-        # Status Badge
+
         self.status_label = ctk.CTkLabel(self, text="SYSTEM READY", font=("Arial", 11, "bold"), 
                                          text_color="white", fg_color="#ADD8E6", corner_radius=8)
         self.status_label.pack(pady=10)
 
-        # --- CONTROL BUTTONS ---
         
-        # START: Green tones
         self.btn_start = ctk.CTkButton(self, text="START / RESUME", corner_radius=15, 
                                        fg_color="#B2F2BB", text_color="#1E5631", hover_color="#74B886", 
                                        command=self.start_trip)
         self.btn_start.pack(pady=6, padx=50, fill="x")
 
-        # DRIVE/STOP: Pink/Red tones
+
         self.btn_toggle = ctk.CTkButton(self, text="CHANGE GEAR", corner_radius=15, 
                                         fg_color="#FFD1DC", text_color="#8E244E", hover_color="#F0A1B5", 
                                         command=self.toggle_move)
         self.btn_toggle.pack(pady=6, padx=50, fill="x")
 
-        # RESET: Tonos Amarillos/Naranjas (Alerta/Reinicio)
+
         self.btn_reset = ctk.CTkButton(self, text="RESET TRIP (ACCIDENT)", corner_radius=15, 
                                        fg_color="#FFE3A8", text_color="#7C5200", hover_color="#FFD075", 
                                        command=self.reset_trip)
         self.btn_reset.pack(pady=6, padx=50, fill="x")
 
-        # FINISH TRIP: Blue tones
         self.btn_stop_trip = ctk.CTkButton(self, text="FINISH (GENERATE BILL)", corner_radius=15, 
                                            fg_color="#D0EBFF", text_color="#0D47A1", hover_color="#90CAF9", 
                                            command=self.finish_trip_final)
         self.btn_stop_trip.pack(pady=6, padx=50, fill="x")
         
-        # --- BOTÓN QUIT (Abajo a la derecha) ---
+
         self.btn_quit = ctk.CTkButton(self, text="QUIT ×", width=85, height=30, corner_radius=10,
                                       fg_color="#FFC3C3", text_color="#7A1E1E", hover_color="#FFA6A6",
                                       font=("Arial", 12, "bold"), command=self.exit_application)
@@ -186,12 +182,12 @@ class MagicTaxiMeter(ctk.CTk):
         self.is_running = False
         self.is_moving = False
         
-        # Reiniciar variables de dinero
+
         self.total_fare = 0.0
         self.fare_stopped = 0.0
         self.fare_moving = 0.0
         
-        # Actualizar la interfaz visual de forma inmediata
+
         self.fare_display.configure(text="€ 0.00")
         self.details_label.configure(text="Stop: €0.00 | Move: €0.00")
         self.status_label.configure(text="SYSTEM READY", fg_color="#ADD8E6")
